@@ -385,7 +385,7 @@ border: 3px solid var(--primary);
                 </div>
 </div></div>
 
-        <div class="toc-chapter current">
+       <div class="toc-chapter current">
             <a href="PriceDynamics.html" class="chapter-link">
                 Chapter 2: PriceDynamics
             </a>
@@ -460,6 +460,12 @@ border: 3px solid var(--primary);
                 <div class="toc-item toc-subsubsection">
                     <a href="PriceDynamics.html#ito">
                         Itô Formula
+                    </a>
+                </div>
+
+                <div class="toc-item toc-subsubsection">
+                    <a href="PriceDynamics.html#GBMParameterCalibration.sec">
+                        Parameter Calibration
                     </a>
                 </div>
 </div></div>
@@ -1050,8 +1056,103 @@ where the drift and the volatility processes are given by
 </div>
 In the calculus of deterministic functions, the expression for <span class="math">\(\mu_F\)</span> does not include the term 
 <span class="math">\(\sigma^2 \frac{1}{2} \frac{\partial^2 F}{\partial x^2}.\)</span>
+</div></p><p><div class="proofs" id="Eq1">
+<div class="heading-container">
+<b class="heading">Proof:</b>
+</div>
+We omit the rigorous proof of the lemma and present only a formal derivation of the formula.</p><p>Let us take <span class="math">\(F=F(X,t)\)</span>, for <span class="math">\((X,t)\in \mathbb{R}^2\)</span> and assume that <span class="math">\(F\)</span> is smooth.</p><p>Using Taylor expansion, we can write
+</p><div class="math" >\begin{eqnarray}
+\Delta F =  \frac{\partial F}{\partial X} \Delta X + \frac{\partial F}{\partial t} \Delta t +
+		 \frac{1}{2}\frac{\partial^2 F}{\partial X^2} \Delta X^2 + 
+		 \frac{\partial^2 F}{\partial X\partial t} \Delta X \Delta t +
+		 \frac{1}{2}\frac{\partial^2 F}{\partial t^2} \Delta t^2 + \cdots
+\end{eqnarray}<div style="text-align:right;">(2.20)</div></div><p>
+Let us consider discrete form of the Itô process 
+</p><div class="math">\[
+\Delta X = \mu(X,t) \Delta t + \sigma(X,t) \Delta W.
+\]</div><p>
+Since <span class="math">\(W\)</span> satisfies the Wiener process, we have</p><div class="math">\[
+\Delta W= \epsilon \sqrt{\Delta t}.
+\]</div><p>
+Therefore, we have (dropping the arguments for the sake of notational convenience)
+</p><div class="math">\[
+\Delta X = \mu \Delta t + \sigma \epsilon \sqrt{\Delta t},
+\]</div><p>
+Squaring both sides, we get
+</p><div class="math">\[
+\Delta X^2 = \sigma^2 \epsilon^2 \Delta t + o(\Delta t).
+\]</div><p>
+Substituting these expressions in <a href="#Eq1">(?)</a>, we get
+</p><div class="math" >\begin{eqnarray}
+\Delta F &amp;=&amp;\left(
+		\mu \frac{\Delta F}{\Delta X} + \frac{\Delta F}{\Delta t}+
+		\frac{1}{2} \sigma^2 \frac{\Delta^2 F}{\Delta X^2}  \epsilon^2
+	\right)\Delta t  +  \sigma  \frac{\Delta F}{\Delta X}\Delta W + o(\Delta t).	
+\end{eqnarray}<div style="text-align:right;">(2.21)</div></div><p>
+Since <span class="math">\(\epsilon \sim \mathcal{N}(0,1),\)</span> we have
+</p><div class="math">\[
+\mathbb{E}(\epsilon^2 \Delta t) = \Delta t,
+~~
+\operatorname{Var}(\epsilon^2 \Delta t) = 2\Delta t^2.
+\]</div><p>
+Hence, we see that
+<span class="math">\(\epsilon^2 \Delta t - \Delta t \xrightarrow[]{~\text{m.s.}~} 0,\)</span> as <span class="math">\(\Delta t\rightarrow 0\)</span>. This allows us to write
+</p><div class="math">\[
+\epsilon^2 \Delta t = \Delta t + o(\Delta t)
+~~ (\text{in  probability}),~ \text{as}~\Delta t\rightarrow 0.
+\]</div><p>
+Substituting this in the above expression for <span class="math">\(\Delta F\)</span>, neglecting <span class="math">\(o(\Delta t)\)</span> terms and then taking <span class="math">\(\Delta t\rightarrow 0\)</span>, we get
+</p><div class="math">\[
+dF =\left(
+		\mu \frac{\partial F}{\partial X} + \frac{\partial F}{\partial t}+
+		\frac{1}{2}\sigma^2\frac{\partial^2 F}{\partial X^2}  
+	\right)d t  +  \sigma  \frac{\partial F}{\partial X}d W.
+\]</div><p>
+</div></p><p><div class="problem">
+<div class="heading-container">
+<b class="heading">Problem:</b>
+</div>
+Let <span class="math">\(S = \{S_t\}\)</span> satisfies the SDE 
+</p><div class="math">\[
+dS_t = \tilde{\mu} S_t dt + \sigma S_t dW_t,
+\]</div><p> 
+for some given <span class="math">\(S_0>0.\)</span>  Define the process <span class="math">\(X=\{X_t\}\)</span> by <span class="math">\(X_t = \log(S_t/S_0)\)</span>. Show that <span class="math">\(X\)</span> is an Itô process and find its drift and volatility.
+</div></p><p><h4 id="GBMParameterCalibration.sec">Parameter Calibration</h4></p><p>In order to simulate the stock price process numerically using GBM given by the formula 
+</p><div class="math" id="GBMSol.eq">\begin{eqnarray}
+S_t = S_0\exp\left(\left( \tilde{\mu} - \frac{\sigma^2}{2}\right)t+\sigma W_t\right),
+\end{eqnarray}<div style="text-align:right;">(2.22)</div></div><p>
+we need to estimate the model parameters, namely, the drift <span class="math">\(\tilde{\mu}\)</span> (or equivalently <span class="math">\(\mu= \tilde{\mu} - \tfrac{1}{2}\sigma^2\)</span>) and the volatility <span class="math">\(\sigma>0\)</span>. This process of determining the model parameter values from historical data is referred to as 
+<b>parameter calibration</b>.</p><p>In this section, we obtain the empirical estimate of <span class="math">\(\mu\)</span>, denoted by <span class="math">\(\widehat{\mu}\)</span> and <span class="math">\(\sigma\)</span>, denoted by <span class="math">\(\widehat{\sigma}\)</span>.</p><p>Given stock price observations <span class="math">\(\{S_k~|~k=0,1,\ldots, N\}\)</span> at equally spaced times 
+<span class="math">\(t_k = k\,\Delta t\)</span>, define the log-returns
+</p><div class="math">\[
+r_k = \ln\!\left(\frac{S_k}{S_{k-1}}\right),~~k=1,2,\ldots, N.
+\]</div><p>
+The empirical estimators <span class="math">\(\widehat{\mu}\)</span> of the drift <span class="math">\(\mu\)</span> of the log-return process can be obtained as
+</p><div class="math">\[
+\widehat{\mu} = \frac{1}{\Delta t} \left(\frac{1}{N}\sum_{k=1}^N r_k\right).
+\]</div><p>
+The empirical estimate <span class="math">\(\widehat{\sigma}\)</span> of the volatility <span class="math">\(\sigma\)</span> is obtained from the relation
+</p><div class="math">\[
+\widehat{\sigma}^2 = \frac{1}{(N-1)\,\Delta t}\sum_{k=1}^N (r_k - \overline{r})^2,
+\]</div><p>
+where <span class="math">\(\overline{r}\)</span> denotes the sample mean of <span class="math">\(\{r_k\}\)</span>.</p><p>The stock price process using the GBM can now be simulated using the formula <a href="#GBMSol.eq">(2.22)</a> with the estimated drift and volatility, given by
+</p><div class="math" id="Calibrated.GBM.eq">\begin{eqnarray}
+\widehat{S}_k = \widehat{S}_{k-1}\exp\left( \widehat{\mu} \Delta t + \widehat{\sigma} \epsilon_k \sqrt{\Delta t}\right), ~~ k=N+1, N+2, \ldots,
+\end{eqnarray}<div style="text-align:right;">(2.23)</div></div><p>
+where <span class="math">\(\epsilon_k \sim \mathcal{N}(0,1).\)</span></p><p>The following figure depicts three sample paths simulated using the calibrated GBM formula <a href="#Calibrated.GBM.eq">(2.23)</a>, with <span class="math">\(\Delta t = 1/252\)</span> (a standard convention for the number of trading days per year).</p><p><div class="figure">
+
+<img src="Figures/GBM.png" class="standalone-figure">
+<div style="text-align: center; font-weight: bold;">One year daily closing price of Infosys Technology  (labeled <i>Past</i>) and the stock price process (labeled <i>Future</i>) simulated using the calibrated GBM formula <a href="#Calibrated.GBM.eq">(2.23)</a>.</div>
+
+</div></p><p><div class="code">
+<div class="heading-container">
+<b class="heading">Code:</b>
+</div>
+Write a python code to simulate 3 sample paths using the calibrated GBM formula <a href="#Calibrated.GBM.eq">(2.23)</a> for a given time series data. You may get the data used in the simulation of the above figure from the following link:
+<a href="https://drive.google.com/file/d/18BxV45Mfrejov-2TObhjDZkfEdJOnU8W/view?usp=sharing" target="_blank">Daily closing price of Infosys</a>
 </div></p>
     </div>
+
  <span style="color: red; font-weight: bold; font-size: 24px;">
   Chapter to be continued ...
 </span>
@@ -1066,7 +1167,7 @@ In the calculus of deterministic functions, the expression for <span class="math
     </script>
        
  <footer>
-  © S. Baskar, Department of Mathematics, IIT Bombay. 2026 (This material is licensed under CC BY-NC 4.0.) — Updated: 21-Jan-2026
+  © S. Baskar, Department of Mathematics, IIT Bombay. 2026 (This material is licensed under CC BY-NC 4.0.) — Updated: 23-Jan-2026
 </footer>
 
 <style>
