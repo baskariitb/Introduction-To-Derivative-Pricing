@@ -252,7 +252,7 @@ border: 3px solid var(--primary);
 </div>
         <div class="full-toc">
 
-        <div class="toc-chapter ">
+       <div class="toc-chapter ">
             <a href="Overview of Financial Systems.html" class="chapter-link">
                 Chapter 1: Overview of Financial Systems
             </a>
@@ -385,7 +385,7 @@ border: 3px solid var(--primary);
                 </div>
 </div></div>
 
-       <div class="toc-chapter current">
+        <div class="toc-chapter current">
             <a href="PriceDynamics.html" class="chapter-link">
                 Chapter 2: PriceDynamics
             </a>
@@ -458,7 +458,7 @@ border: 3px solid var(--primary);
                 </div>
 
                 <div class="toc-item toc-subsubsection">
-                    <a href="PriceDynamics.html#ito">
+                    <a href="PriceDynamics.html#ito-formula">
                         Itô Formula
                     </a>
                 </div>
@@ -466,6 +466,36 @@ border: 3px solid var(--primary);
                 <div class="toc-item toc-subsubsection">
                     <a href="PriceDynamics.html#GBMParameterCalibration.sec">
                         Parameter Calibration
+                    </a>
+                </div>
+
+                <div class="toc-item toc-subsection">
+                    <a href="PriceDynamics.html#interest-rate-models">
+                        Interest-rate Models
+                    </a>
+                </div>
+
+                <div class="toc-item toc-subsubsection">
+                    <a href="PriceDynamics.html#wiener-integral">
+                        Wiener Integral
+                    </a>
+                </div>
+
+                <div class="toc-item toc-subsubsection">
+                    <a href="PriceDynamics.html#numerical-simulation">
+                        Numerical Simulation
+                    </a>
+                </div>
+
+                <div class="toc-item toc-subsubsection">
+                    <a href="PriceDynamics.html#distribution-of-the-stochastic-increment">
+                        Distribution of the stochastic increment
+                    </a>
+                </div>
+
+                <div class="toc-item toc-subsubsection">
+                    <a href="PriceDynamics.html#exact-simulation-scheme">
+                        Exact simulation scheme
                     </a>
                 </div>
 </div></div>
@@ -1027,7 +1057,7 @@ Therefore, the stock price process <span class="math">\(\{S_t\}\)</span> can als
 S_t = S_0\exp\left(\left( \tilde{\mu} - \frac{\sigma^2}{2}\right)t+\sigma W_t\right)
 \end{eqnarray}<div style="text-align:right;">(2.17)</div></div><p>
 which is known as the <b>geometric Brownian motion</b> (GBM).</p><p>
-</div></p><p><h4 id="itô-formula">Itô Formula</h4></p><p>As given in <a href="PriceDynamics.html#GBM.rem">Remark &laquo;Click Here&raquo; </a>, it is important to note that <span class="math">\(\mu=\tilde{\mu}\)</span> holds only in deterministic models. In stochastic models, the presence of randomness alters the relationship between the drift of the price process and that of the log-price process, and hence <span class="math">\(\mu\)</span> and <span class="math">\(\tilde{\mu}\)</span> are generally different.  This discrepancy arises because the classical chain rule of calculus is no longer valid for stochastic processes driven by Brownian motion. The appropriate replacement is given by Itô’s formula, which we discuss in this section in a general setting.  We begin with the definition of an <b>Itô process</b>.</p><p><div class="definition" id="ItoProcess.def">
+</div></p><p><h4 id="ito-formula">Itô Formula</h4></p><p>As given in <a href="PriceDynamics.html#GBM.rem">Remark &laquo;Click Here&raquo; </a>, it is important to note that <span class="math">\(\mu=\tilde{\mu}\)</span> holds only in deterministic models. In stochastic models, the presence of randomness alters the relationship between the drift of the price process and that of the log-price process, and hence <span class="math">\(\mu\)</span> and <span class="math">\(\tilde{\mu}\)</span> are generally different.  This discrepancy arises because the classical chain rule of calculus is no longer valid for stochastic processes driven by Brownian motion. The appropriate replacement is given by Itô’s formula, which we discuss in this section in a general setting.  We begin with the definition of an <b>Itô process</b>.</p><p><div class="definition" id="ItoProcess.def">
 <div class="heading-container">
 <b class="heading">Definition:</b>
 </div>
@@ -1150,12 +1180,221 @@ where <span class="math">\(\epsilon_k \sim \mathcal{N}(0,1).\)</span></p><p>The 
 </div>
 Write a python code to simulate 3 sample paths using the calibrated GBM formula <a href="#Calibrated.GBM.eq">(2.23)</a> for a given time series data. You may get the data used in the simulation of the above figure from the following link:
 <a href="https://drive.google.com/file/d/18BxV45Mfrejov-2TObhjDZkfEdJOnU8W/view?usp=sharing" target="_blank">Daily closing price of Infosys</a>
+</div></p><p><h3 id="interest-rate-models">Interest-rate Models</h3></p><p>In the previous subsection, we introduced a stochastic model for the stock price process based on a multiplicative growth criterion, leading to exponential behavior in the absence of random fluctuations.  In this section, we introduce a stochastic model for the interest-rate process based on the mean-reverting phenomenon, which describes a process that tends to revert toward a long-term average level.  </p><p>Recall that the deterministic version of the mean-reverting model was introduced in <a href="PriceDynamics.html#deterministic.meanreverting.model.pr">Problem &laquo;Click Here&raquo; </a>.  by including a stochastic component driven by Brownian motion, we obtain the stochastic model for the interest-rate process <span class="math">\(\{r_t\}\)</span> as
+</p><div class="math" id="Vasicek.model.eq">\begin{eqnarray}
+dr_t = \lambda (\mu - r_t) dt + \sigma dW_t,
+\end{eqnarray}<div style="text-align:right;">(2.24)</div></div><p>
+where <span class="math">\(\lambda>0\)</span> is the speed of mean reversion, <span class="math">\(\mu\)</span> is the long-term mean level, and <span class="math">\(\sigma\)</span> is the volatility (standard deviation) of random fluctuations.</p><p>This model is known as the <b>Vasicek model</b> in the financial context, especially for modeling the short-term interest-rate.  Mathematically, the process <span class="math">\(\{r_t\}\)</span> follows an <b>Ornstein--Uhlenbeck process</b>, 
+a Gaussian mean-reverting stochastic process originally introduced in statistical physics.</p><p>The Vasicek model <a href="#Vasicek.model.eq">(2.24)</a> is a linear SDE, which can be written in the linear form as
+</p><div class="math">\[
+dr_t + \lambda r_t\,dt = \lambda \mu\,dt + \sigma\,dW_t.
+\]</div><p>
+Multiplying both sides by the integrating factor <span class="math">\(e^{\lambda t}\)</span> and using Itô lemma, we can rewrite the above equation equivalently as
+</p><div class="math">\[
+d\!\left(e^{\lambda t} r_t\right)
+    = \lambda \mu e^{\lambda t}\,dt + \sigma e^{\lambda t}\,dW_t.
+\]</div><p>Integrate both sides from <span class="math">\(0\)</span> to <span class="math">\(t\)</span> gives
+</p><div class="math">\[
+e^{\lambda t} r_t - r_0
+    = \int_0^t \lambda \mu e^{\lambda s}\,ds
+      + \int_0^t \sigma e^{\lambda s}\,dW_s.
+\]</div><p>
+Multiplying both sides by <span class="math">\(e^{-\lambda t}\)</span>, we obtain the exact solution of the Vasicek (Ornstein--Uhlenbeck) process as
+</p><div class="math" id="VasicekSolution.eq">\begin{eqnarray}
+    r_t = r_0 e^{-\lambda t}
+           + \mu(1 - e^{-\lambda t})
+           + \sigma \int_0^t e^{-\lambda(t-s)}\,dW_s.
+\end{eqnarray}<div style="text-align:right;">(2.25)</div></div><p>
+The first two terms represent the deterministic mean-reverting component, while the third term represents the stochastic contribution driven by the Wiener process and is expressed as a <b>stochastic integral</b>, which in this case is a <b>Wiener integral</b> because the integrand is a deterministic function.</p><p>Observe that, unlike the stock price process governed by the GBM, the exact solution <a href="#VasicekSolution.eq">(2.25)</a> for the process <span class="math">\(\{r_t\}\)</span> cannot be used directly to generate (or plot) simulated data, even when the parameters are given (or calibrated).  This is because of the presence of the stochastic integral <span class="math">\(\int_0^t e^{-\lambda(t-s)}\,dW_s\)</span>, which is a random variable depending on the entire Brownian path <span class="math">\(\{W_t~|~t\in [0,1]\}\)</span>. Thus, the process <span class="math">\(\{r_t\}\)</span> is known only in law (<i>i.e.</i>, through its distribution), but not as an explicit function of time. </p><p><h4 id="wiener-integral">Wiener Integral</h4></p><p>From the above discussion, it is clear that to simulate (or even interpret) the process <span class="math">\(\{r_t\}\)</span>, we must first understand how to define and evaluate a Wiener integral.  </p><p>Let <span class="math">\(\{W_t\}_{t\ge 0}\)</span> be a Wiener process defined on a probability space
+<span class="math">\((\Omega,\mathcal{F},\mathbb{P})\)</span>.</p><p>
+<b>Step 1: Definition for step functions.</b>
+Let <span class="math">\(f:[0,T]\to\mathbb{R}\)</span> be a step function of the form
+</p><div class="math">\[
+f(t) = \sum_{k=0}^{n-1} a_k {1\hspace{-0.09in}1}_{(t_k,t_{k+1}]}(t),
+\qquad
+0=t_0 < t_1 < \cdots < t_n=T,
+\]</div><p>
+where <span class="math">\(a_k\in\mathbb{R}\)</span> are constants.  
+The <b>Wiener integral</b> of <span class="math">\(f\)</span> with respect to <span class="math">\(W_t\)</span> is defined as
+</p><div class="math">\[
+\int_0^T f(t)\,dW_t
+:=
+\sum_{k=0}^{n-1} a_k \bigl(W_{t_{k+1}}-W_{t_k}\bigr).
+\]</div><p><div class="problem">
+<div class="heading-container">
+<b class="heading">Problem:</b>
+</div>
+[<b>Isometry Property for Step Functions</b>]</p><p>Show that for any step function <span class="math">\(f\)</span>, 
+</p><div class="math">\[
+\mathbb{E}\!\left[\left(\int_0^T f(t)\,dW_t\right)^2\right]
+=
+\int_0^T f(t)^2\,dt.
+\]</div><p>
+</div></p><p><b>Step 2: Extension to square-integrable functions.</b>
+Let <span class="math">\(f\in L^2([0,T])\)</span>. Consider a uniform partition of <span class="math">\([0,T]\)</span> in the form
+</p><div class="math">\[
+0 = t_0^{(n)} < t_1^{(n)} < \cdots < t_n^{(n)} = T,
+~~
+t_k^{(n)} = \frac{kT}{n},~~
+k=0,1,\ldots, n.
+\]</div><p>
+Define a sequence of step functions
+</p><div class="math">\[
+f_n(t)
+:=
+\sum_{k=0}^{n-1}
+f\!\left(t_k^{(n)}\right)\,
+{1\hspace{-0.09in}1}_{(t_k^{(n)},\, t_{k+1}^{(n)}]}(t).
+\]</div><p><div class="problem">
+<div class="heading-container">
+<b class="heading">Problem:</b>
+</div>
+Show that the sequence <span class="math">\(\{f_n\}\)</span> given above satisfies
+</p><div class="math">\[
+\int_0^T |f_n(t)-f(t)|^2\,dt \;\longrightarrow\; 0.
+\]</div><p>
+</div></p><p><div class="definition">
+<div class="heading-container">
+<b class="heading">Definition:</b>
+</div>
+[<b>Wiener Integral</b>]</p><p>Let <span class="math">\(f\in L^2([0,T])\)</span> and let <span class="math">\(\{f_n\}\)</span> be a sequence of step functions such that
+</p><div class="math" >\begin{eqnarray}
+\int_0^T |f_n(t)-f(t)|^2\,dt \;\longrightarrow\; 0.
+\end{eqnarray}<div style="text-align:right;">(2.26)</div></div><p>
+The <b>Wiener integral</b> of <span class="math">\(f\)</span> with respect to the Wiener process <span class="math">\(\{W_t\}\)</span> is defined as
+</p><div class="math" >\begin{eqnarray}
+\int_0^T f(t)\,dW_t
+\;:=\;
+\lim_{n\to\infty} \int_0^T f_n(t)\,dW_t,
+\end{eqnarray}<div style="text-align:right;">(2.27)</div></div><p>
+where the limit is taken in the <b>mean-square sense</b>, that is,
+</p><div class="math">\[
+\lim_{n\to\infty}
+\mathbb{E}\!\left[
+\left|
+ \int_0^T f_n(t)\,dW_t
+-
+\int_0^T f(t)\,dW_t
+\right|^2
+\right]
+=0.
+\]</div><p>
+</div></p><p>The isometry property of the Wiener integral for step functions can be extended to <span class="math">\(L^2\)</span>-functions.</p><p><div class="problem" id="isometry.l2.prob">
+<div class="heading-container">
+<b class="heading">Problem:</b>
+</div>
+[<b>Isometry Property for <span class="math">\(L^2\)</span>-Functions</b>]
+</p><p>Let <span class="math">\(\{W_t\}_{t\ge 0}\)</span> be a Wiener process.  Show that for any deterministic function <span class="math">\(f\in L^2([0,T])\)</span>, the Wiener
+integral satisfies the isometry property
+</p><div class="math">\[
+\mathbb{E}\!\left[
+\left(
+\int_0^T f(t)\,dW_t
+\right)^2
+\right]
+=
+\int_0^T f(t)^2\,dt.
+\]</div><p>
+</div></p><p><div class="remark" id="normal.distribution.Wiener.integral.rem">
+<div class="heading-container">
+<b class="heading">Remark:</b>
+</div>
+
+Since the integrand <span class="math">\(f\)</span> is deterministic and belongs to <span class="math">\(L^2([0,T])\)</span>, the Wiener integral is a Gaussian random variable with
+</p><div class="math">\[
+\int_0^T f(t)\,dW_t
+\sim
+\mathcal{N}\!\left(0,\;\int_0^T f(t)^2\,dt\right).
+\]</div><p>
+</div></p><p>The above result can be proved easily when the integrand <span class="math">\(f\)</span> is a step function, and this case is left as an exercise.  The proof for general <span class="math">\(f\in L^2([0,T])\)</span> is omitted.</p><p><h4 id="numerical-simulation">Numerical Simulation</h4></p><p>We now discuss an exact numerical procedure to simulate the discrete-time mean-reverting process <span class="math">\(\{r_{t_k}\}_{k=0}^N\)</span>, for a partition
+</p><div class="math">\[
+0=t_0 < t_1 < \cdots < t_N=T,
+\qquad
+\Delta t = t_{k+1}-t_k = \frac{T}{N},
+\]</div><p>
+where <span class="math">\(N>0\)</span> is a given integer.</p><p>The Wiener integral in <a href="#VasicekSolution.eq">(2.25)</a> at <span class="math">\(t=t_{k+1}\)</span> can be written as
+</p><div class="math" >\begin{eqnarray}
+\int_0^{t_{k+1}} e^{-\lambda(t_{k+1}-s)}\,dW_s
+&amp;=&amp;
+\int_0^{t_k} e^{-\lambda(t_{k+1}-s)}\,dW_s
++
+\int_{t_k}^{t_{k+1}} e^{-\lambda(t_{k+1}-s)}\,dW_s\\
+&amp;=&amp;
+e^{-\lambda\Delta t}
+\int_0^{t_k} e^{-\lambda(t_k-s)}\,dW_s
++
+\int_{t_k}^{t_{k+1}} e^{-\lambda(t_{k+1}-s)}\,dW_s.
+\end{eqnarray}<div style="text-align:right;">(2.28)</div></div><p>Substituting the above expression in <a href="#VasicekSolution.eq">(2.25)</a> gives the exact recursion relation
+</p><div class="math" id="VasicekRecursion">\begin{eqnarray}
+r_{t_{k+1}}
+=
+\mu + (r_{t_k}-\mu)e^{-\lambda\Delta t}
++
+\sigma
+\int_{t_k}^{t_{k+1}} e^{-\lambda(t_{k+1}-s)}\,dW_s.
+\end{eqnarray}<div style="text-align:right;">(2.29)</div></div><p><h4 id="distribution-of-the-stochastic-increment">Distribution of the stochastic increment</h4></p><p>The integrand
+</p><div class="math" >\begin{eqnarray}
+s \mapsto e^{-\lambda(t_{k+1}-s)}
+\end{eqnarray}<div style="text-align:right;">(2.30)</div></div><p>
+is deterministic and belongs to <span class="math">\(L^2([t_k,t_{k+1}])\)</span>. Hence by <a href="PriceDynamics.html#normal.distribution.Wiener.integral.rem">Remark &laquo;Click Here&raquo; </a>, the stochastic
+integral in <a href="#VasicekRecursion">(2.29)</a> is a centered Gaussian random variable. </p><p>By the isometry property <a href="PriceDynamics.html#isometry.l2.prob">Problem &laquo;Click Here&raquo; </a>, we have
+</p><div class="math" >\begin{eqnarray}
+\begin{aligned}
+\mathbb{E}\!\left[
+\left(
+\int_{t_k}^{t_{k+1}} e^{-\lambda(t_{k+1}-s)}\,dW_s
+\right)^2
+\right]
+&amp;=
+\int_{t_k}^{t_{k+1}} e^{-2\lambda(t_{k+1}-s)}\,ds \\
+&amp;=
+\frac{1-e^{-2\lambda\Delta t}}{2\lambda}.
+\end{aligned}
+\end{eqnarray}<div style="text-align:right;">(2.31)</div></div><p>Therefore,
+</p><div class="math" >\begin{eqnarray}
+\int_{t_k}^{t_{k+1}} e^{-\lambda(t_{k+1}-s)}\,dW_s
+\sim
+\mathcal{N}\!\left(
+0,\;\frac{1-e^{-2\lambda\Delta t}}{2\lambda}
+\right).
+\end{eqnarray}<div style="text-align:right;">(2.32)</div></div><p><h4 id="exact-simulation-scheme">Exact simulation scheme</h4></p><p>Let <span class="math">\(\{Z_k\}_{k=0}^{N-1}\)</span> be independent standard normal random variables,
+<span class="math">\(Z_k\sim\mathcal{N}(0,1)\)</span>. Then, we can write
+</p><div class="math" >\begin{eqnarray}
+\int_{t_k}^{t_{k+1}} e^{-\lambda(t_{k+1}-s)}\,dW_s
+=
+\sqrt{\frac{1-e^{-2\lambda\Delta t}}{2\lambda}}\; Z_k.
+\end{eqnarray}<div style="text-align:right;">(2.33)</div></div><p>Substituting into <a href="#VasicekRecursion">(2.29)</a> yields the <b>exact numerical
+scheme</b>:
+</p><div class="math" id="VasicekExactScheme">\begin{eqnarray}
+r_{k+1}
+=
+\mu + (r_k-\mu)e^{-\lambda\Delta t}
++
+\sigma
+\sqrt{\frac{1-e^{-2\lambda\Delta t}}{2\lambda}}\; Z_k,
+\qquad
+Z_k\sim\mathcal{N}(0,1).
+\end{eqnarray}<div style="text-align:right;">(2.34)</div></div><p><div class="note">
+<div class="heading-container">
+<b class="heading">Note:</b>
+</div>
+<span class="math">\(~\)</span></p><p>The scheme <a href="#VasicekExactScheme">(2.34)</a> uses the exact transition
+distribution of the Vasicek model and therefore introduces no discretization
+bias.
+</div></p><p>The following figure depicts the numerical simulation of the mean-reverting process using the formula <a href="#VasicekExactScheme">(2.34)</a>.</p><p><div class="figure">
+
+<img src="Figures/vasicek.png" class="standalone-figure">
+<div style="text-align: center; font-weight: bold;"> Numerical simulation of the mean-reverting process using <a href="#VasicekExactScheme">(2.34)</a>.</div>
+
+</div></p><p><div class="code">
+<div class="heading-container">
+<b class="heading">Code:</b>
+</div>
+Understand the python code given in the following link:
+<a href="https://drive.google.com/file/d/1cd5AXkVOCMf_edF5S_glW1RdpQHaUVN6/view?usp=sharing" target="_blank">Vasicek</a>
 </div></p>
     </div>
 
- <span style="color: red; font-weight: bold; font-size: 24px;">
-  Chapter to be continued ...
-</span>
    
     <script>
     document.addEventListener("contextmenu", function(e) { e.preventDefault(); });
@@ -1167,7 +1406,7 @@ Write a python code to simulate 3 sample paths using the calibrated GBM formula 
     </script>
        
  <footer>
-  © S. Baskar, Department of Mathematics, IIT Bombay. 2026 (This material is licensed under CC BY-NC 4.0.) — Updated: 23-Jan-2026
+  © S. Baskar, Department of Mathematics, IIT Bombay. 2026 (This material is licensed under CC BY-NC 4.0.) — Updated: 01-Feb-2026
 </footer>
 
 <style>
